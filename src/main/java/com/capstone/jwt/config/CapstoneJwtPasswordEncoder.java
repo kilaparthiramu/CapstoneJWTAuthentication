@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CapstonePBKDF2Encoder implements PasswordEncoder{
+public class CapstoneJwtPasswordEncoder implements PasswordEncoder{
 	
 	@Value("${capstone.password.encoder.secret}")
 	private String secret;

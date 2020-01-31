@@ -13,16 +13,22 @@ import reactor.core.publisher.Mono;
 @RestController
 public class CapstoneController {
 	
-	@RequestMapping(value = "/resource/user", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('USER')")
-	public Mono<ResponseEntity<?>> user() {
-		return Mono.just(ResponseEntity.ok(new Message("Content for user")));
-	}
-	
 	@RequestMapping(value = "/resource/admin", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ADMIN')")
 	public Mono<ResponseEntity<?>> admin() {
 		return Mono.just(ResponseEntity.ok(new Message("Content for admin")));
+	}
+	
+	@RequestMapping(value = "/resource/pmo", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('PMO')")
+	public Mono<ResponseEntity<?>> pmo() {
+		return Mono.just(ResponseEntity.ok(new Message("Content for pmo")));
+	}
+	
+	@RequestMapping(value = "/resource/poc", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('POC')")
+	public Mono<ResponseEntity<?>> poc() {
+		return Mono.just(ResponseEntity.ok(new Message("Content for poc")));
 	}
 	
 	@RequestMapping(value = "/resource/user-or-admin", method = RequestMethod.GET)

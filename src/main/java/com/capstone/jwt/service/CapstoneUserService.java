@@ -1,4 +1,4 @@
-package com.capstone.jwt.service;
+/*package com.capstone.jwt.service;
 
 import com.capstone.jwt.model.Role;
 import com.capstone.jwt.model.CapstoneUserDetails;
@@ -32,4 +32,4 @@ public class CapstoneUserService {
 		}
 	}
 	
-}
+}*/

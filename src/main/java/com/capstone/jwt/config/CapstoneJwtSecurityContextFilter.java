@@ -13,7 +13,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
-public class CapstoneSecurityContextRepository implements ServerSecurityContextRepository{
+public class CapstoneJwtSecurityContextFilter implements ServerSecurityContextRepository{
 	
 	@Autowired
 	private CapstoneJwtAuthentication authenticationManager;
@@ -30,9 +30,6 @@ public class CapstoneSecurityContextRepository implements ServerSecurityContextR
 
 		if (authHeader != null && authHeader.startsWith("Bearer ")) {
 			String authToken = authHeader.substring(7);
-			System.out.println("=============================");
-			System.out.println(authToken);
-			System.out.println("=============================");
 			Authentication auth = new UsernamePasswordAuthenticationToken(authToken, authToken);
 			return this.authenticationManager.authenticate(auth).map((authentication) -> {
 				return new SecurityContextImpl(authentication);

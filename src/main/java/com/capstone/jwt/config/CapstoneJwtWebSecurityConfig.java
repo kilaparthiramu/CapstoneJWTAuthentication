@@ -13,17 +13,17 @@ import reactor.core.publisher.Mono;
 
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-public class CapstoneWebSecurityConfig {
+public class CapstoneJwtWebSecurityConfig {
 
 	@Autowired
 	private CapstoneJwtAuthentication authenticationManager;
 	
 	@Autowired
-	private CapstoneSecurityContextRepository securityContextRepository;
+	private CapstoneJwtSecurityContextFilter securityContextRepository;
 
 	@Bean
-	public SecurityWebFilterChain securitygWebFilterChain(ServerHttpSecurity http) {
-		return http
+	public SecurityWebFilterChain securitygWebFilterChain(ServerHttpSecurity serverHttpSecurity) {
+		return serverHttpSecurity
 				.exceptionHandling()
 				.authenticationEntryPoint((swe, e) -> {
 					return Mono.fromRunnable(() -> {
@@ -41,7 +41,7 @@ public class CapstoneWebSecurityConfig {
 				.securityContextRepository(securityContextRepository)
 				.authorizeExchange()
 				.pathMatchers(HttpMethod.OPTIONS).permitAll()
-				.pathMatchers("/login","/resource/user")
+				.pathMatchers("/login")
 				.permitAll()
 				.anyExchange().authenticated()
 				.and().build();

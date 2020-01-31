@@ -15,9 +15,6 @@ import com.capstone.jwt.model.CapstoneUserDetails;
 public class CapstoneJwtTokenGeneration implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-		
-	@Value("${capstone.jwt.expiration}")
-	private String expirationTime;
 	
 	@Value("${capstone.jwt.secret}")
 	private String secret;
@@ -30,10 +27,9 @@ public class CapstoneJwtTokenGeneration implements Serializable {
 
 	@SuppressWarnings("deprecation")
 	private String doGenerateToken(Map<String, Object> claims, String username) {
-		Long expirationTimeLong = Long.parseLong(expirationTime); 
 		
 		final Date createdDate = new Date();
-		final Date expirationDate = new Date(createdDate.getTime() + expirationTimeLong * 1000);
+		final Date expirationDate = new Date(createdDate.getTime() + 3600 * 1000);
 		return Jwts.builder()
 				.setClaims(claims)
 				.setSubject(username)
