@@ -1,42 +1,48 @@
 package com.capstone.jwt.config;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.Base64;
+import java.security.spec.KeySpec;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import javax.crypto.spec.DESedeKeySpec;
+
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CapstoneJwtPasswordEncoder implements PasswordEncoder{
+public class CapstoneJwtPasswordEncoder{
 	
-	@Value("${capstone.password.encoder.secret}")
-	private String secret;
+	private static final String UNICODE_FORMAT = "UTF8";
+    public static final String DESEDE_ENCRYPTION_SCHEME = "DESede";
+    private KeySpec ks;
+    private SecretKeyFactory skf;
+    private Cipher cipher;
+    byte[] arrayBytes;
+    private String myEncryptionKey;
+    private String myEncryptionScheme;
+    SecretKey key;
 
-	@Value("${capstone.password.encoder.iteration}")
-	private Integer iteration;
+    public CapstoneJwtPasswordEncoder() throws Exception {
+        myEncryptionKey = "ThisIsSpartaThisIsSparta";
+        myEncryptionScheme = DESEDE_ENCRYPTION_SCHEME;
+        arrayBytes = myEncryptionKey.getBytes(UNICODE_FORMAT);
+        ks = new DESedeKeySpec(arrayBytes);
+        skf = SecretKeyFactory.getInstance(myEncryptionScheme);
+        cipher = Cipher.getInstance(myEncryptionScheme);
+        key = skf.generateSecret(ks);
+    }
 
-	@Value("${capstone.password.encoder.keylength}")
-	private Integer keylength;
-	
-	
-	@Override
-	public String encode(CharSequence cs) {
-		try {
-			byte[] result = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512")
-											.generateSecret(new PBEKeySpec(cs.toString().toCharArray(), secret.getBytes(), iteration, keylength))
-											.getEncoded();
-			return Base64.getEncoder().encodeToString(result);
-		} catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
-	@Override
-	public boolean matches(CharSequence cs, String string) {
-		return encode(cs).equals(string);
-	}
-	
+    public String encode(String unencryptedString) {
+        String encryptedString = null;
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            byte[] plainText = unencryptedString.getBytes(UNICODE_FORMAT);
+            byte[] encryptedText = cipher.doFinal(plainText);
+            encryptedString = new String(Base64.encodeBase64(encryptedText));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return encryptedString;
+    }  
 }

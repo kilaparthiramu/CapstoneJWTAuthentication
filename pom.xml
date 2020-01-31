@@ -90,6 +90,11 @@
 		   <groupId>com.github.jasync-sql</groupId>
 		   <artifactId>jasync-r2dbc-mysql</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		</dependency>
+		
 				
 	</dependencies>
 	<dependencyManagement>
