@@ -31,7 +31,7 @@ public class CapstoneJwtController {
 	public Mono<ResponseEntity<?>> login(@RequestBody CapstoneJwtRequest capstoneJwtRequest) {
 		return capstoneUserDetailsRepository.findById(capstoneJwtRequest.getUsername()).map((userDetails) -> {
 			if (passwordEncoder.encode(capstoneJwtRequest.getPassword()).equals(userDetails.getPassword())) {
-				return ResponseEntity.ok(new CapstoneJwtRespone(jwtUtil.generateToken(userDetails)));
+				return ResponseEntity.ok(new CapstoneJwtRespone(jwtUtil.generateToken(userDetails),userDetails.getRole()));
 			} else {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 			}
