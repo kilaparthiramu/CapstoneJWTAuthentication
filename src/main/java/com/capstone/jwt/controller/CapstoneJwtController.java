@@ -5,9 +5,9 @@ import com.capstone.jwt.config.CapstoneJwtPasswordEncoder;
 import com.capstone.jwt.dao.CapstoneUserDetailsRepository;
 import com.capstone.jwt.model.CapstoneJwtRequest;
 import com.capstone.jwt.model.CapstoneJwtRespone;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,13 +28,13 @@ public class CapstoneJwtController {
 	
 
 	@PostMapping(value = "/login")
-	public Mono<ResponseEntity<?>> login(@RequestBody CapstoneJwtRequest capstoneJwtRequest) {
+	public Mono<CapstoneJwtRespone> login(@RequestBody CapstoneJwtRequest capstoneJwtRequest) {
 		return capstoneUserDetailsRepository.findById(capstoneJwtRequest.getUsername()).map((userDetails) -> {
 			if (passwordEncoder.encode(capstoneJwtRequest.getPassword()).equals(userDetails.getPassword())) {
-				return ResponseEntity.ok(new CapstoneJwtRespone(jwtUtil.generateToken(userDetails),userDetails.getRole()));
+				return new CapstoneJwtRespone(jwtUtil.generateToken(userDetails),userDetails.getRole());
 			} else {
-				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+				return new CapstoneJwtRespone(HttpStatus.UNAUTHORIZED,"Invalid Credentials");
 			}
-		}).defaultIfEmpty(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+		}).defaultIfEmpty(new CapstoneJwtRespone(HttpStatus.UNAUTHORIZED,"Invalid Credentials"));
 	}
 }

@@ -1,10 +1,10 @@
 package com.capstone.jwt.model;
 
-public class Message {
+public class CapstoneErrorMessage {
 	
 	private String content;
 
-	public Message(String content) {
+	public CapstoneErrorMessage(String content) {
 		super();
 		this.content = content;
 	}
