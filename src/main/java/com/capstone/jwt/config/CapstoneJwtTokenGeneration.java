@@ -29,7 +29,7 @@ public class CapstoneJwtTokenGeneration implements Serializable {
 	private String doGenerateToken(Map<String, Object> claims, String username) {
 		
 		final Date createdDate = new Date();
-		final Date expirationDate = new Date(createdDate.getTime() + 100 * 1000);
+		final Date expirationDate = new Date(createdDate.getTime() + 60 * 60 * 1000);
 		return Jwts.builder()
 				.setClaims(claims)
 				.setSubject(username)
